@@ -9,6 +9,7 @@ const app = express();
 const users = require("./User/users");
 const recipes = require("./Recipe/recipes");
 const ingredients = require("./Recipe/ingredients");
+const steps = require("./Recipe/steps");
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +34,7 @@ require("./config/passport")(passport);
 app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/ingredients", ingredients);
+app.use("/steps", steps);
 
 const port = process.env.PORT || 5000;
 

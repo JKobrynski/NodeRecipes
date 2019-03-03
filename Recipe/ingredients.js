@@ -62,4 +62,8 @@ router.post(
   }
 );
 
+//@route   TODO: DELETE /ingredients
+//@desc    Delete ingredient
+//@access  Private
+
 module.exports = router;

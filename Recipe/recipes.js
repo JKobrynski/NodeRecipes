@@ -60,9 +60,19 @@ router.post(
 );
 
 // @route   GET /recipes
-// @desc    Get all recipes
+// @desc    Get all/filtered recipes
 // @access  Public
 router.get("/", async (req, res) => {
+  // let sort = {};
+  // let filter = {};
+
+  // if (typeof req.query.sort === "string") {
+  //   if (req.query.sort === "date") {
+  //     sort = { updated: 1 };
+  //   } else if (req.query.sort === "revdate") {
+  //     sort = { updated: -1 };
+  //   }
+  // }
   try {
     const recipes = await Recipe.find();
     if (recipes.length === 0) {
