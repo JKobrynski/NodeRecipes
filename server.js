@@ -7,6 +7,8 @@ const app = express();
 
 // TODO: Bring in route files
 const users = require("./User/users");
+const recipes = require("./Recipe/recipes");
+const ingredients = require("./Recipe/ingredients");
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,6 +31,8 @@ require("./config/passport")(passport);
 
 // TODO: Use routes
 app.use("/users", users);
+app.use("/recipes", recipes);
+app.use("/ingredients", ingredients);
 
 const port = process.env.PORT || 5000;
 
