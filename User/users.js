@@ -140,4 +140,25 @@ router.get(
   }
 );
 
+// @route   DELETE /users
+// @desc    Delete user
+// @access  Private
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const user = await User.findOneAndRemove({ _id: req.user.id });
+      if (user) {
+        return res.status(200).json({ success: "User deleted" });
+        // return res.status(204).send("User successfully deleted");
+      } else {
+        return res.status(404).json({ notfound: "User not found" });
+      }
+    } catch (e) {
+      return res.status(500).json({ error: "Unknown server error" });
+    }
+  }
+);
+
 module.exports = router;
