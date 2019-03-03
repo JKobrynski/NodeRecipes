@@ -7,17 +7,7 @@ const passport = require("passport");
 const Recipe = require("./Recipe-model");
 
 // Bring in validation
-const validateRecipeInput = require("../validation/recipe");
-const validateIngredientsInput = require("../validation/ingredients");
 const validateStepInput = require("../validation/steps");
-const validateRateInput = require("../validation/rate");
-
-// @route   GET /test
-// @desc    Test route
-// @access  Public
-router.get("/test", (req, res) => {
-  res.status(200).json({ success: "Steps works" });
-});
 
 // @route   POST /
 // @desc    Add step to recipe (+ at specified index)
@@ -72,6 +62,14 @@ router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    if (typeof req.body.recId !== "string") {
+      return res.status(400).json({ noid: "Recipe id not provided" });
+    }
+
+    if (typeof req.body.stepId !== "string") {
+      return res.status(400).json({ nostep: "Step id not provided" });
+    }
+
     try {
       const recipe = await Recipe.findOne({
         author: req.user.id,

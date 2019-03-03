@@ -7,17 +7,7 @@ const passport = require("passport");
 const Recipe = require("./Recipe-model");
 
 // Bring in validation
-const validateRecipeInput = require("../validation/recipe");
 const validateIngredientsInput = require("../validation/ingredients");
-const validateStepInput = require("../validation/steps");
-const validateRateInput = require("../validation/rate");
-
-// @route   GET /test
-// @desc    Test route
-// @access  Public
-router.get("/test", (req, res) => {
-  res.status(200).json({ success: true });
-});
 
 //@route   POST /ingredients
 //@desc    Add ingredient to recipe
@@ -65,5 +55,43 @@ router.post(
 //@route   TODO: DELETE /ingredients
 //@desc    Delete ingredient
 //@access  Private
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    if (typeof req.body.recId !== "string") {
+      return res.status(400).json({ noid: "Recipe id not provided" });
+    }
+    if (typeof req.body.ingId !== "string") {
+      return res
+        .status(400)
+        .json({ noingredient: "Ingredient id not provided" });
+    }
+
+    try {
+      const recipe = await Recipe.findOne({
+        author: req.user.id,
+        _id: req.body.recId
+      });
+      if (!recipe) {
+        return res.status(404).json({ notfound: "Recipe not found" });
+      }
+
+      // Get remove index
+      const removeIndex = recipe.ingredients
+        .map(item => item.id)
+        .indexOf(req.body.ingId);
+
+      // Remove from array
+      recipe.ingredients.splice(removeIndex, 1);
+
+      // Save
+      const rec = await recipe.save();
+      res.status(200).json(rec);
+    } catch (e) {
+      return res.status(500);
+    }
+  }
+);
 
 module.exports = router;
