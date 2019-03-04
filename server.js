@@ -10,6 +10,7 @@ const users = require("./User/users");
 const recipes = require("./Recipe/recipes");
 const ingredients = require("./Recipe/ingredients");
 const steps = require("./Recipe/steps");
+const rates = require("./Recipe/rates");
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,6 +36,7 @@ app.use("/users", users);
 app.use("/recipes", recipes);
 app.use("/ingredients", ingredients);
 app.use("/steps", steps);
+app.use("/rates", rates);
 
 const port = process.env.PORT || 5000;
 
