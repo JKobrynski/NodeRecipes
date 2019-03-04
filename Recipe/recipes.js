@@ -8,16 +8,6 @@ const Recipe = require("./Recipe-model");
 
 // Bring in validation
 const validateRecipeInput = require("../validation/recipe");
-const validateIngredientsInput = require("../validation/ingredients");
-const validateStepInput = require("../validation/steps");
-const validateRateInput = require("../validation/rate");
-
-// @route   GET api/recipes/test
-// @desc    Tests recipes route
-// @access  Public
-router.get("/test", (req, res) => {
-  res.json({ msg: "Recipes works" });
-});
 
 // @route   POST /recipes
 // @desc    Create recipe
@@ -63,18 +53,35 @@ router.post(
 // @desc    Get all/filtered recipes
 // @access  Public
 router.get("/", async (req, res) => {
-  // let sort = {};
-  // let filter = {};
+  let sort = {};
+  let filter = {};
 
-  // if (typeof req.query.sort === "string") {
-  //   if (req.query.sort === "date") {
-  //     sort = { updated: 1 };
-  //   } else if (req.query.sort === "revdate") {
-  //     sort = { updated: -1 };
-  //   }
-  // }
+  if (typeof req.query.sort === "string") {
+    if (req.query.sort === "date") {
+      sort = { date: 1 };
+    } else if ((req.query.sort = "revdate")) {
+      sort = { date: -1 };
+    }
+  }
+
+  if (typeof req.query.author === "string") {
+    filter.author = req.query.author;
+  }
+
+  if (typeof req.query.gf === "string") {
+    filter.glutenfree = true;
+  }
+
+  if (typeof req.query.vegan === "string") {
+    filter.vegan = true;
+  }
+
+  if (typeof req.query.vege === "string") {
+    filter.vegetarian = true;
+  }
+
   try {
-    const recipes = await Recipe.find();
+    const recipes = await Recipe.find(filter, null, { sort: sort });
     if (recipes.length === 0) {
       return res.status(404).json({ notfound: "Recipes not found" });
     }
@@ -84,17 +91,27 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route   POST api/recipes/ingredients/:id
-// @desc    Add ingredient to recipe
+// @route   DELETE /recipes
+// @desc    Delete recipe
 // @access  Private
-// router.post("/ingredients", passport.authenticate("jwt", { session: false }), async (req, res) => {
-//   const { errors, isValid } = validateIngredientsInput(req.body);
-
-//   if(!isValid){
-//     return res.status(400).json(errors);
-//   }
-
-//   const recipeId = req.body.id
-// })
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const recipe = await Recipe.findOneAndRemove({
+        author: req.user.id,
+        _id: req.body.recId
+      });
+      if (recipe) {
+        return res.status(200).json({ success: true });
+      } else {
+        return res.status(404).json({ notfound: "Recipe not found" });
+      }
+    } catch (e) {
+      return res.status(500).json({ error: "Unknown server error" });
+    }
+  }
+);
 
 module.exports = router;

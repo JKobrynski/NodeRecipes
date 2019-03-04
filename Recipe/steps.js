@@ -39,16 +39,14 @@ router.post(
 
       if (typeof req.body.index === "string") {
         // Adding at specified index
-        // TODO: async/await
         recipe.steps.splice(req.body.index, 0, newStep);
-        recipe.save().then(recipe => res.status(200).json(recipe));
       } else {
         // Adding at the end
-        // TODO: async/await
         recipe.steps.push(newStep);
-
-        recipe.save().then(recipe => res.status(200).json(recipe));
       }
+
+      const rec = await recipe.save();
+      return res.status(200).json(rec);
     } catch (e) {
       return res.status(500);
     }
@@ -90,8 +88,6 @@ router.delete(
       // Save
       const rec = await recipe.save();
       res.status(200).json(rec);
-
-      //recipe.save().then(recipe => res.json(recipe));
     } catch (e) {
       return res.status(500);
     }

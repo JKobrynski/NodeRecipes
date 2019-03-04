@@ -12,17 +12,6 @@ const validateLoginInput = require("../validation/login");
 // Load user model
 const User = require("./User-model");
 
-// @route   GET /users/test
-// @desc    Tests users route
-// @access  Public
-router.get("/test", async (req, res) => {
-  try {
-    res.status(200).json({ success: "Users works" });
-  } catch (e) {
-    res.status(500).json({ error: "Something went wrong" });
-  }
-});
-
 // @route   POST /users
 // @desc    Register
 // @access  Public
@@ -46,18 +35,6 @@ router.post("/", async (req, res) => {
         email: req.body.email,
         password: req.body.password
       });
-
-      // bcrypt.genSalt(10, (err, salt) => {
-      //   bcrypt.hash(newUser.password, salt, (err, hash) => {
-      //     if (err) throw err;
-      //     newUser.password = hash;
-
-      //     newUser
-      //       .save()
-      //       .then(user => res.json(user))
-      //       .catch(err => console.log(err));
-      //   });
-      // });
 
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, async (err, hash) => {
@@ -151,7 +128,6 @@ router.delete(
       const user = await User.findOneAndRemove({ _id: req.user.id });
       if (user) {
         return res.status(200).json({ success: "User deleted" });
-        // return res.status(204).send("User successfully deleted");
       } else {
         return res.status(404).json({ notfound: "User not found" });
       }
