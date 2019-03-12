@@ -1,42 +1,44 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const passport = require("passport");
+const app = require("./app");
 
-const app = express();
+// const express = require("express");
+// const mongoose = require("mongoose");
+// const bodyParser = require("body-parser");
+// const passport = require("passport");
 
-// TODO: Bring in route files
-const users = require("./User/users");
-const recipes = require("./Recipe/recipes");
-const ingredients = require("./Recipe/ingredients");
-const steps = require("./Recipe/steps");
-const rates = require("./Recipe/rates");
+// const app = express();
 
-// Body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// // TODO: Bring in route files
+// const users = require("./User/users");
+// const recipes = require("./Recipe/recipes");
+// const ingredients = require("./Recipe/ingredients");
+// const steps = require("./Recipe/steps");
+// const rates = require("./Recipe/rates");
 
-// Database config
-const db = require("./config/keys").mongoURI || process.env.MONGODB_URL;
+// // Body parser middleware
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
-// Connecting to MongoDB
-mongoose
-  .connect(db, { useNewUrlParser: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.log(err));
+// // Database config
+// const db = require("./config/keys").mongoURI || process.env.MONGODB_URL;
 
-// Passport middleware
-app.use(passport.initialize());
+// // Connecting to MongoDB
+// mongoose
+//   .connect(db, { useNewUrlParser: true })
+//   .then(() => console.log("Connected to MongoDB"))
+//   .catch(err => console.log(err));
 
-// Passport config
-require("./config/passport")(passport);
+// // Passport middleware
+// app.use(passport.initialize());
 
-// TODO: Use routes
-app.use("/users", users);
-app.use("/recipes", recipes);
-app.use("/ingredients", ingredients);
-app.use("/steps", steps);
-app.use("/rates", rates);
+// // Passport config
+// require("./config/passport")(passport);
+
+// // TODO: Use routes
+// app.use("/users", users);
+// app.use("/recipes", recipes);
+// app.use("/ingredients", ingredients);
+// app.use("/steps", steps);
+// app.use("/rates", rates);
 
 const port = process.env.PORT || 5000;
 
