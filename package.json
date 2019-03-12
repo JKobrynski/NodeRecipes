@@ -4,8 +4,9 @@
   "description": "Simple app to store recipes",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "jest --watchAll",
+    "start": "node server.js",
+    "dev": "env-cmd ./config/dev.env nodemon server.js"
   },
   "author": "Julian Kobryński",
   "license": "ISC",
@@ -18,5 +19,8 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "jest": "^24.4.0"
   }
 }
